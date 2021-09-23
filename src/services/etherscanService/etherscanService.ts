@@ -1,6 +1,6 @@
 import got from 'got';
 
-import { getLastBlockNumber } from './etherscanResponce.dto';
+import { BlockInfoDto, BlockNumberDto } from './etherscanResponce.dto';
 
 /**
  *
@@ -12,7 +12,7 @@ export default class EtherscanService {
             /**
              * Allready parsed body response
              */
-            data: unknown;
+            data: object;
 
             /**
              * Unix time
@@ -22,7 +22,7 @@ export default class EtherscanService {
     >;
 
     /**
-     * Fetching library. Encapsulated for mock/proxy purposes.
+     * Fetching library
      */
     private async fetcher(url: string): Promise<object> {
         return await got(url).json();
@@ -32,8 +32,11 @@ export default class EtherscanService {
         this.cache = new Map();
     }
 
-    private async fetch(url: URL): Promise<any> {
-        const endpoint = url.toString();
+    private async fetch(params: URLSearchParams): Promise<any> {
+        const endpoint = new URL(
+            params.toString(),
+            this.rootEndpoint
+        ).toString();
 
         if (this.cache.has(endpoint)) {
             const cachedRequest = this.cache.get(endpoint);
@@ -64,12 +67,26 @@ export default class EtherscanService {
      * Returns the number of most recent block
      * @see https://docs.etherscan.io/api-endpoints/geth-parity-proxy#eth_blocknumber
      */
-    async getLastBlockNumber(): Promise<getLastBlockNumber> {
+    async getLastBlockNumber(): Promise<BlockNumberDto> {
         const queryParams = new URLSearchParams(
             'module=proxy&action=eth_blockNumber'
         );
-        const endpoint = new URL(queryParams.toString(), this.rootEndpoint);
 
-        return await this.fetch(endpoint);
+        return await this.fetch(queryParams);
+    }
+
+    /**
+     * Returns information about a block by block number
+     * @param tag {string} Hexadecimal in string. Example: '0x10d4f'
+     * @see https://docs.etherscan.io/api-endpoints/geth-parity-proxy#eth_getblockbynumber
+     */
+    async getBlockByNumber(tag: string): Promise<BlockInfoDto> {
+        const queryParams = new URLSearchParams(
+            'module=proxy&action=eth_getBlockByNumber&boolean=true'
+        );
+
+        queryParams.append('tag', tag);
+
+        return await this.fetch(queryParams);
     }
 }
