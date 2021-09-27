@@ -1,16 +1,15 @@
 {
     "name": "eth-observer",
     "version": "1.0.0",
-    "description": "This is a test task for applying for a job",
-    "main": "dist/index.js",
+    "description": "",
     "scripts": {
         "lint": "tslint -p tsconfig.json",
         "test": "jest",
         "test:watch": "jest --watch",
         "build": "tsc -p tsconfig.json",
-        "format": "prettier 'src/**/*.ts' --write",
-        "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
-        "start": "[ -d 'dist' ] && node dist/index.js || echo 'Error: Directory `dist` does not exists. Try run `npm build` first'"
+        "format": "prettier --write .",
+        "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/index.js\"",
+        "start": "[ -d 'build' ] && node build/index.js || echo 'Error: Directory `build` does not exists. Try run `npm build` first'"
     },
     "repository": {
         "type": "git",
@@ -24,13 +23,13 @@
     },
     "homepage": "https://github.com/izzqz/eth-observer#readme",
     "dependencies": {
-        "fastify": "^3.21.3",
+        "fastify": "^3.21.6",
         "got": "^11.8.2"
     },
     "devDependencies": {
         "@types/jest": "^27.0.2",
-        "@types/node": "^16.9.6",
-        "jest": "^27.2.1",
+        "@types/node": "^16.10.1",
+        "jest": "^27.2.2",
         "pino-pretty": "^7.0.1",
         "prettier": "^2.4.1",
         "ts-jest": "^27.0.5",

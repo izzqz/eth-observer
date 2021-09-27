@@ -2,12 +2,18 @@
     "compilerOptions": {
         "module": "commonjs",
         "esModuleInterop": false,
-        "target": "es6",
+        "target": "esnext",
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "dist",
-        "rootDir": "src",
-        "types": ["jest", "node"]
+        "outDir": "build",
+        "rootDir": "./",
+        "baseUrl": "./",
+        "types": ["jest", "node"],
+        "paths": {
+            "@interfaces/*": ["./src/interfaces/*"],
+            "@services/*": ["./src/services/*"],
+            "@test/*": ["./test/*"]
+        }
     },
     "exclude": ["node_modules"],
     "lib": ["es2015"]
