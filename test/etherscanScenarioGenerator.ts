@@ -1,8 +1,8 @@
-const crypto = require('crypto');
+import { randomBytes } from 'crypto';
 
-class BlockchainScenario {
-    #MAX_TRANSACTIONS = 1;
-    #WALLETS_COUNT = 3;
+export default class BlockchainScenario {
+    static MAX_TRANSACTIONS_PER_BLOCK = 500;
+    static WALLETS_COUNT = 10;
 
     util = {
         parseUint256: (hex) => parseInt(hex, 16) / Math.pow(10, 18),
@@ -11,45 +11,61 @@ class BlockchainScenario {
     };
 
     addresses = [];
+    expectFromLength: number;
+    chain: any[];
 
-    constructor(chainSize, expectFromLength) {
+    constructor(chainSize: number, expectFromLength: number) {
+        this.expectFromLength = expectFromLength;
         this.#generateAdresses();
         this.chain = this.#generateChain(chainSize);
-        this.expected = this.#getExpected(expectFromLength);
     }
 
     #generateChain(size) {
-        return new Array(size).fill(undefined).map((b, index) => {
-            return {
-                jsonrpc: '2.0',
-                id: 1,
-                result: {
-                    baseFeePerGas: '0x0',
-                    difficulty: '0x0',
-                    extraData: '0x0',
-                    gasLimit: '0x0',
-                    gasUsed: '0x0',
-                    hash: '0x0',
-                    logsBloom: '0x0',
-                    miner: '0x0',
-                    mixHash: '0x0',
-                    nonce: '0x0',
-                    number: this.util.toHex(index),
-                    parentHash: '0x0',
-                    receiptsRoot: '0x0',
-                    sha3Uncles: '0x0',
-                    size: '0x0',
-                    stateRoot: '0x0',
-                    timestamp: '0x0',
-                    totalDifficulty: '0x0',
-                    transactions: this.#generateTransactions(
-                        this.#MAX_TRANSACTIONS
-                    ), // MAX
-                    transactionsRoot: '0x0',
-                    uncles: ['0x0']
-                }
-            };
-        });
+        return new Array(size)
+            .fill(undefined)
+            .map(this.generateNewBlock.bind(this));
+    }
+
+    generateNewBlock(undefined, index) {
+        const block = {
+            jsonrpc: '2.0',
+            id: 1,
+            result: {
+                baseFeePerGas: '0x0',
+                difficulty: '0x0',
+                extraData: '0x0',
+                gasLimit: '0x0',
+                gasUsed: '0x0',
+                hash: '0x0',
+                logsBloom: '0x0',
+                miner: '0x0',
+                mixHash: '0x0',
+                nonce: '0x0',
+                number: null,
+                parentHash: '0x0',
+                receiptsRoot: '0x0',
+                sha3Uncles: '0x0',
+                size: '0x0',
+                stateRoot: '0x0',
+                timestamp: '0x0',
+                totalDifficulty: '0x0',
+                transactions: this.#generateTransactions(
+                    BlockchainScenario.MAX_TRANSACTIONS_PER_BLOCK
+                ),
+                transactionsRoot: '0x0',
+                uncles: ['0x0']
+            }
+        };
+
+        // if run inside map
+        if (index !== undefined) {
+            block.result.number = this.util.toHex(index);
+            return block;
+        }
+
+        // else self mutation
+        block.result.number = this.chain.length + 1;
+        this.chain.push(block);
     }
 
     #generateTransactions(max) {
@@ -89,13 +105,13 @@ class BlockchainScenario {
     }
 
     #generateAdresses() {
-        for (let i = 0; i < this.#WALLETS_COUNT; i++) {
-            const address = '0x' + crypto.randomBytes(30).toString('hex');
+        for (let i = 0; i < BlockchainScenario.WALLETS_COUNT; i++) {
+            const address = '0x' + randomBytes(30).toString('hex');
             this.addresses.push(address);
         }
     }
 
-    #getRandomAddress(except) {
+    #getRandomAddress(except?) {
         let addresses = this.addresses;
         if (except) {
             addresses = addresses.filter((a) => a !== except);
@@ -104,8 +120,10 @@ class BlockchainScenario {
         return addresses[Math.floor(addresses.length * Math.random())];
     }
 
-    #getExpected(length) {
-        const chainSlice = this.chain.slice(length);
+    getMostValuableAdress() {
+        const chainSliced = this.chain.slice(
+            this.chain.length - this.expectFromLength
+        );
 
         let wallets = this.addresses.map((a) => ({
             address: a,
@@ -133,11 +151,12 @@ class BlockchainScenario {
             });
         };
 
-        chainSlice.forEach((block) =>
+        chainSliced.forEach((block) =>
             block.result.transactions.forEach(applyTransaction)
         );
 
         let largest = {
+            address: '0x0',
             value: 0
         };
 
@@ -149,6 +168,12 @@ class BlockchainScenario {
 
         return largest.address;
     }
-}
 
-module.exports = BlockchainScenario;
+    getLastBlockId() {
+        return this.chain.length - 1;
+    }
+
+    getBlockInfo(number) {
+        return this.chain[number];
+    }
+}
