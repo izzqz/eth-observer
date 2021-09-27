@@ -1,6 +1,6 @@
-import GlobalConfig from './type';
+import { FastifyServerOptions } from 'fastify';
 
-const config: GlobalConfig = {
+const config = {
     server: {
         port: 8080
     },
@@ -8,9 +8,10 @@ const config: GlobalConfig = {
         logger: {
             prettyPrint: true
         }
-    },
+    } as FastifyServerOptions,
     separateServices: {
         etherscan: {
+            apiKey: process.env.ETHERSCAN_APIKEY,
             rootEndpoint: new URL('https://api.etherscan.io/api'),
             cacheTime: 5000
         }
