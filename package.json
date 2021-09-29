@@ -6,7 +6,7 @@
         "lint": "tslint -p tsconfig.json",
         "test": "jest",
         "test:watch": "jest --watch",
-        "build": "tsc -p tsconfig.json",
+        "build": "rimraf build && tsc -p tsconfig.json",
         "format": "prettier --write .",
         "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/src/app.js\"",
         "start": "node build/src/app.js"
@@ -33,6 +33,7 @@
         "jest": "^27.2.2",
         "pino-pretty": "^7.0.1",
         "prettier": "^2.4.1",
+        "rimraf": "^3.0.2",
         "ts-jest": "^27.0.5",
         "ts-node": "^10.2.1",
         "tsc-watch": "^4.5.0",

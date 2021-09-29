@@ -18,32 +18,26 @@ worker.on('message', (msg) => {
     }
 
     if (msg.event === 'log') {
-        server.log.info(msg.value)
-    }
-
-    if (
-        msg.event === 'new-transactions' &&
-        observerService.mostValuableAdress
-    ) {
-        server.log.info(`Block handled, ${msg.value.length} new transactions`);
+        server.log.info(msg.value);
     }
 });
 
 worker.onerror = (err) => {
-    throw err;
+    // TODO: Worker error handler
+    server.log.fatal('Uncaught error:', err.message);
+    process.exit(1);
 };
 
 const observerService = new ObserverService(worker, config.bufferSize);
 
-server.get(
-    '/mostValuableAddress',
-    async () => observerService.mostValuableAdress
-);
+server.get('/mostValuableAddress', async () => {
+    return observerService.mostValuableWallet;
+});
 
 function runServer() {
-    server.listen(config.server.port, (err, address) => {
+    server.listen(config.server.port, (err) => {
         if (err) {
-            server.log.error(err.message);
+            server.log.fatal(err.message);
             process.exit(1);
         }
 

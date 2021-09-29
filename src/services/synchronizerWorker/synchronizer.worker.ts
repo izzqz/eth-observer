@@ -62,26 +62,24 @@ async function getTransactionsOf(number): Promise<transaction[]> {
 
     // First run
     do {
-        lastblock = await etherScan.getLastBlockNumber().then((d) => {
-            return d.result;
-        });
+        lastblock = await etherScan.getLastBlockNumber().then((d) => d.result);
 
         if (lastblock !== bufferEndblock) {
             bufferEndblock = lastblock;
 
-            blockTransactions = await getTransactionsOf(bufferEndblock); // <- From blockchain end
+            blockTransactions = await getTransactionsOf(bufferEndblock);
 
             transactionsBuffer.push(blockTransactions); // Add to the end
         }
 
         if (lastblock === bufferEndblock) {
             bufferStartblock = hexUtil.decrease(
-                bufferStartblock || bufferEndblock
+                bufferStartblock || bufferEndblock // if its first request, bufferStartblock is undefined
             );
 
-            blockTransactions = await getTransactionsOf(bufferStartblock); // <- From buffer start
+            blockTransactions = await getTransactionsOf(bufferStartblock);
 
-            transactionsBuffer.unshift(blockTransactions); // Add to the beginning of an buffer
+            transactionsBuffer.unshift(blockTransactions); // Add to the beginning of a buffer
         }
 
         parentPort.postMessage({
@@ -96,6 +94,11 @@ async function getTransactionsOf(number): Promise<transaction[]> {
             value: transactions
         })
     );
+
+    parentPort.postMessage({
+        event: 'log',
+        value: `Buffer full, starting synchronizer loop...`
+    });
 
     parentPort.postMessage({
         event: 'ready',
@@ -119,6 +122,11 @@ async function getTransactionsOf(number): Promise<transaction[]> {
                 parentPort.postMessage({
                     event: 'new-transactions',
                     value: blockTransactions
+                });
+
+                parentPort.postMessage({
+                    event: 'log',
+                    value: `Block handled, ${blockTransactions.length} new transactions`
                 });
             }
 

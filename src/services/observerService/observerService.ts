@@ -6,7 +6,10 @@ import { transaction } from '../../interfaces/transaction.type';
 export default class ObserverService {
     private lastBlocks: Array<transaction[]>;
 
-    mostValuableAdress: string;
+    mostValuableWallet: {
+        address: string;
+        value: number;
+    };
 
     constructor(
         private synchronizer: ISynchronizer,
@@ -19,7 +22,7 @@ export default class ObserverService {
     private newMessageHandler(msg: SynchronizerMessage) {
         if (msg.event === 'new-transactions') {
             this.addTransactionsToBuffer(msg.value);
-            
+
             if (this.lastBlocks.includes(null)) return;
 
             this.recalculateMostValueble();
@@ -59,7 +62,10 @@ export default class ObserverService {
             return e[1] > a[1] ? e : a;
         });
 
-        this.mostValuableAdress = address;
+        this.mostValuableWallet = {
+            address,
+            value
+        };
         return address;
     }
 }

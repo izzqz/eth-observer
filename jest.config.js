@@ -10,7 +10,7 @@ module.exports = {
         '@interfaces/(.*)': '<rootDir>/interfaces/$1',
         '@services/(.*)': '<rootDir>/services/$1',
         '@test/(.*)': '<rootDir>/../test/$1',
-        '@utils/(.*)': '<rootDir>/utils/$1',
+        '@utils/(.*)': '<rootDir>/utils/$1'
     },
     collectCoverageFrom: ['**/*.ts'],
     coverageDirectory: '../coverage',

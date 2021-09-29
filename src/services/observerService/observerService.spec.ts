@@ -57,7 +57,7 @@ describe('ObserverService', () => {
     });
 
     it('should count most valuable address', () => {
-        expect(observerService.mostValuableAdress).toBe(
+        expect(observerService.mostValuableWallet).toBe(
             scenario.getMostValuableAdress()
         );
     });
