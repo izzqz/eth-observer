@@ -16,7 +16,7 @@ const hexUtil = {
     decrease: (hex: string): string => {
         return '0x' + (parseInt(hex, 16) - 1).toString(16);
     },
-    
+
     /**
      * Parses uint256 hexabecimal string
      * @param hex hexadecimal string

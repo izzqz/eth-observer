@@ -1,5 +1,7 @@
 import { FastifyServerOptions } from 'fastify';
 
+require('dotenv').config();
+
 const config = {
     server: {
         port: 8080
@@ -12,10 +14,11 @@ const config = {
     separateServices: {
         etherscan: {
             apiKey: process.env.ETHERSCAN_APIKEY,
-            rootEndpoint: new URL('https://api.etherscan.io/api'),
+            rootEndpoint: 'https://api.etherscan.io/api',
             cacheTime: 5000
         }
-    }
+    },
+    bufferSize: 10
 };
 
 export default config;

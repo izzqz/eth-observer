@@ -3,12 +3,9 @@ import got from 'got';
 import {
     BlockInfoDto,
     BlockNumberDto
-} from '@interfaces/etherscan/etherscan.dto';
-import { IEtherscan } from '@interfaces/etherscan/etherscan.interface';
+} from '../../../interfaces/etherscan/etherscan.dto';
+import { IEtherscan } from '../../../interfaces/etherscan/etherscan.interface';
 
-/**
- * TODO: Request rate <-
- */
 export default class EtherscanService implements IEtherscan {
     /**
      * Based on free api plan its
@@ -35,13 +32,22 @@ export default class EtherscanService implements IEtherscan {
      * Fetching library
      */
     private async fetcher(url: string): Promise<object> {
-        this.lastRequestTime = Date.now();
+        this.commitRequestTime();
+        let data;
+
         try {
-            return await got(url).json();
+            data = await got(url).json();
         } catch (err) {
             throw new Error(err);
-        } finally {
         }
+
+        // TODO: EtherscanError handler
+        if (data.error) {
+            // console.log(url);
+            throw new Error(data.error.message);
+        }
+
+        return data;
     }
 
     constructor(
@@ -58,7 +64,7 @@ export default class EtherscanService implements IEtherscan {
         }
 
         const endpoint = new URL(
-            params.toString(),
+            '?' + params.toString(),
             this.rootEndpoint
         ).toString();
 

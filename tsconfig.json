@@ -8,12 +8,7 @@
         "outDir": "build",
         "rootDir": "./",
         "baseUrl": "./",
-        "types": ["jest", "node"],
-        "paths": {
-            "@interfaces/*": ["./src/interfaces/*"],
-            "@services/*": ["./src/services/*"],
-            "@test/*": ["./test/*"]
-        }
+        "types": ["jest", "node"]
     },
     "exclude": ["node_modules"],
     "lib": ["es2015"]

@@ -26,7 +26,7 @@ export default class BlockchainScenario {
             .map(this.generateNewBlock.bind(this));
     }
 
-    generateNewBlock(undefined, index) {
+    generateNewBlock(undefined?, index?) {
         const block = {
             jsonrpc: '2.0',
             id: 1,
