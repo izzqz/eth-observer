@@ -1,8 +1,8 @@
 import { randomBytes } from 'crypto';
 
 export default class BlockchainScenario {
-    static MAX_TRANSACTIONS_PER_BLOCK = 500;
-    static WALLETS_COUNT = 10;
+    static MAX_TRANSACTIONS_PER_BLOCK = 200;
+    static WALLETS_COUNT = 50;
 
     util = {
         parseUint256: (hex) => parseInt(hex, 16) / Math.pow(10, 18),

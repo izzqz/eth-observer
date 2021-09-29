@@ -18,7 +18,7 @@ const config = {
             cacheTime: 5000
         }
     },
-    bufferSize: 10
+    bufferSize: 100
 };
 
 export default config;

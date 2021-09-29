@@ -47,7 +47,6 @@ function runServer() {
             process.exit(1);
         }
 
-        // server.log.info(`Server listening at ${address}`);
         server.log.info(
             `Running with ${config.separateServices.etherscan.apiKey} apikey`
         );

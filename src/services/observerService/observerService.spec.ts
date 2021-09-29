@@ -61,23 +61,4 @@ describe('ObserverService', () => {
             scenario.getMostValuableAdress()
         );
     });
-
-    it('should change valuable on new block', async () => {
-        expect(observerService.mostValuableAdress).toBe(
-            scenario.getMostValuableAdress()
-        );
-
-        for (let i = 0; i < 100; i++) {
-            const transactions =
-                scenario.generateNewBlock().result.transactions;
-
-            mockedSynchronizer.emit('new-transactions', transactions);
-
-            await timeout(10);
-
-            expect(observerService.recalculateMostValueble()).toBe(
-                scenario.getMostValuableAdress()
-            );
-        }
-    }, 10_000);
 });
