@@ -3,9 +3,12 @@ import got from 'got';
 import {
     BlockInfoDto,
     BlockNumberDto
-} from '../../../interfaces/etherscan/etherscan.dto';
-import { IEtherscan } from '../../../interfaces/etherscan/etherscan.interface';
+} from '../../interfaces/etherscan/etherscan.dto';
+import { IEtherscan } from '../../interfaces/etherscan/etherscan.interface';
 
+/**
+ * Library for communicating with the Etherscan API
+ */
 export default class EtherscanService implements IEtherscan {
     /**
      * Based on free api plan its
@@ -13,7 +16,7 @@ export default class EtherscanService implements IEtherscan {
      * And up to 100,000 API calls per day
      * @see https://etherscan.io/apis
      */
-    static REQUEST_TIMEOUT = 200 + 10;
+    static REQUEST_TIMEOUT = 200;
 
     /**
      * UNIX Time of last api request
@@ -43,7 +46,6 @@ export default class EtherscanService implements IEtherscan {
 
         // TODO: EtherscanError handler
         if (data.error) {
-            // console.log(url);
             throw new Error(data.error.message);
         }
 

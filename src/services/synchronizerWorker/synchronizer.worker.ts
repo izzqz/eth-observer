@@ -2,14 +2,14 @@ import { isMainThread, parentPort, workerData } from 'worker_threads';
 
 import { IEtherscan } from '../../interfaces/etherscan/etherscan.interface';
 import { transaction } from '../../interfaces/transaction.type';
-import EtherscanService from './etherscanService/etherscanService';
+import EtherscanService from '../../lib/etherscan/etherscan';
 import hexUtil from '../../utils/hexUtil';
 
 if (isMainThread) {
     throw new Error('Cannot run as main tread');
 }
 
-const SYNC_TYMEOUT = 500;
+const SYNC_TYMEOUT = 300;
 
 const { rootEndpoint, cacheTime, apiKey } = workerData.etherscanConfiguration;
 const bufferSize = workerData.bufferSize;
@@ -126,7 +126,7 @@ async function getTransactionsOf(number): Promise<transaction[]> {
 
                 parentPort.postMessage({
                     event: 'log',
-                    value: `Block handled, ${blockTransactions.length} new transactions`
+                    value: `Block ${lastblock} handled, ${blockTransactions.length} new transactions`
                 });
             }
 

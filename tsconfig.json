@@ -6,7 +6,7 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "build",
-        "rootDir": "./",
+        "rootDir": "./src",
         "baseUrl": "./",
         "types": ["jest", "node"]
     },

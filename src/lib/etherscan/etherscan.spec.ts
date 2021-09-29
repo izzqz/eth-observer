@@ -1,7 +1,7 @@
 import got from 'got';
 import { mocked } from 'ts-jest/utils';
 
-import EtherscanService from './etherscanService';
+import EtherscanService from './etherscan';
 
 jest.mock('got');
 

@@ -5,6 +5,12 @@ import config from './config/config';
 
 const server = fastify(config.fastifyOptions);
 
+server.log.debug(
+    `ETHERSCAN_APIKEY=${config.separateServices.etherscan.apiKey}`
+);
+
+server.log.info('Starting worker...');
+
 const worker = runSynchronizerWorker({
     workerData: {
         etherscanConfiguration: config.separateServices.etherscan,
@@ -22,12 +28,6 @@ worker.on('message', (msg) => {
     }
 });
 
-worker.onerror = (err) => {
-    // TODO: Worker error handler
-    server.log.fatal('Uncaught error:', err.message);
-    process.exit(1);
-};
-
 const observerService = new ObserverService(worker, config.bufferSize);
 
 server.get('/mostValuableAddress', async () => {
@@ -40,9 +40,19 @@ function runServer() {
             server.log.fatal(err.message);
             process.exit(1);
         }
-
-        server.log.info(
-            `Running with ${config.separateServices.etherscan.apiKey} apikey`
-        );
     });
 }
+
+process.on('SIGINT', () => {
+    server.log.warn('SIGINT recieved, closing worker...');
+    worker.terminate();
+    process.exit();
+});
+
+process.on('uncaughtException', (err) => {
+    worker.terminate();
+    server.log.fatal('UncaughtException:');
+    server.log.fatal(err.name, err.message);
+    server.log.debug(err.stack);
+    process.exit(1);
+});
