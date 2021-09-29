@@ -5,15 +5,18 @@ import config from './config/config';
 
 const server = fastify(config.fastifyOptions);
 
-server.log.debug(
-    `ETHERSCAN_APIKEY=${config.separateServices.etherscan.apiKey}`
-);
+if (config.etherscan.apiKey) {
+    server.log.debug(`ETHERSCAN_APIKEY=${config.etherscan.apiKey}`);
+} else {
+    server.log.error('Cannot run without Ethercan API key')
+    process.exit(1);
+}
 
 server.log.info('Starting worker...');
 
 const worker = runSynchronizerWorker({
     workerData: {
-        etherscanConfiguration: config.separateServices.etherscan,
+        etherscanConfiguration: config.etherscan,
         bufferSize: config.bufferSize
     }
 });

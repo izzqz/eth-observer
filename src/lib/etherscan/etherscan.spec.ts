@@ -6,7 +6,7 @@ import EtherscanService from './etherscan';
 jest.mock('got');
 
 describe('EtherscanService', () => {
-    const CACHE_TIMEOUT = 500;
+    const REQUEST_RATE = 200;
 
     const mockedGot = mocked(got);
     let etherscanService: EtherscanService;
@@ -15,7 +15,7 @@ describe('EtherscanService', () => {
     beforeEach(() => {
         etherscanService = new EtherscanService(
             new URL('blob://localhost'),
-            CACHE_TIMEOUT
+            REQUEST_RATE
         );
 
         expect(jest.isMockFunction(got)).toBeTruthy();
@@ -113,12 +113,8 @@ describe('EtherscanService', () => {
     });
 
     describe('request rate', () => {
-        it('constant should be defined', () => {
-            expect(EtherscanService.REQUEST_TIMEOUT).toBeDefined();
-        });
-
         it('should be used', async () => {
-            const until = Date.now() + EtherscanService.REQUEST_TIMEOUT;
+            const until = Date.now() + REQUEST_RATE;
 
             while (until > Date.now()) {
                 await etherscanService.getLastBlockNumber(); // 2

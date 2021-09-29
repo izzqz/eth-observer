@@ -11,14 +11,6 @@ import { IEtherscan } from '../../interfaces/etherscan/etherscan.interface';
  */
 export default class EtherscanService implements IEtherscan {
     /**
-     * Based on free api plan its
-     * 5 calls/second limit
-     * And up to 100,000 API calls per day
-     * @see https://etherscan.io/apis
-     */
-    static REQUEST_TIMEOUT = 200;
-
-    /**
      * UNIX Time of last api request
      */
     lastRequestTime: number;
@@ -54,13 +46,11 @@ export default class EtherscanService implements IEtherscan {
 
     constructor(
         public rootEndpoint: URL,
-        public cacheTime: number,
+        public requestRate: number,
         public apiKey?: string
     ) {}
 
     private async fetch(params: URLSearchParams): Promise<any> {
-        const { REQUEST_TIMEOUT } = EtherscanService;
-
         if (this.apiKey) {
             params.append('apikey', this.apiKey);
         }
@@ -71,11 +61,11 @@ export default class EtherscanService implements IEtherscan {
         ).toString();
 
         const isExceedsTheRate =
-            this.lastRequestTime + REQUEST_TIMEOUT > Date.now();
+            this.lastRequestTime + this.requestRate > Date.now();
 
         if (isExceedsTheRate) {
             const awaitTime =
-                this.lastRequestTime + REQUEST_TIMEOUT - Date.now();
+                this.lastRequestTime + this.requestRate - Date.now();
             await this.timeout(awaitTime);
         }
 

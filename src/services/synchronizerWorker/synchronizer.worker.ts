@@ -1,3 +1,4 @@
+import { request } from 'http';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
 
 import { IEtherscan } from '../../interfaces/etherscan/etherscan.interface';
@@ -9,14 +10,12 @@ if (isMainThread) {
     throw new Error('Cannot run as main tread');
 }
 
-const SYNC_TYMEOUT = 300;
-
-const { rootEndpoint, cacheTime, apiKey } = workerData.etherscanConfiguration;
+const { rootEndpoint, requestRate, apiKey } = workerData.etherscanConfiguration;
 const bufferSize = workerData.bufferSize;
 
 const etherScan: IEtherscan = new EtherscanService(
     rootEndpoint,
-    cacheTime,
+    requestRate,
     apiKey
 );
 
@@ -86,7 +85,7 @@ async function getTransactionsOf(number): Promise<transaction[]> {
             event: 'log',
             value: `Filling the buffer ${transactionsBuffer.length}/${bufferSize} completed`
         });
-    } while (transactionsBuffer.length !== bufferSize);
+    } while (transactionsBuffer.length <= bufferSize);
 
     transactionsBuffer.forEach((transactions) =>
         parentPort.postMessage({
@@ -130,7 +129,7 @@ async function getTransactionsOf(number): Promise<transaction[]> {
                 });
             }
 
-            await timeout(SYNC_TYMEOUT);
+            await timeout(requestRate);
         } catch (err) {
             throw err;
         }

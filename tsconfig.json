@@ -7,9 +7,9 @@
         "sourceMap": true,
         "outDir": "build",
         "rootDir": "./src",
-        "baseUrl": "./",
         "types": ["jest", "node"]
     },
+    "include": ["src/**/*", "tests/**/*"],
     "exclude": ["node_modules"],
     "lib": ["es2015"]
 }

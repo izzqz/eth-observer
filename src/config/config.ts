@@ -11,12 +11,18 @@ const config = {
             prettyPrint: true
         }
     } as FastifyServerOptions,
-    separateServices: {
-        etherscan: {
-            apiKey: process.env.ETHERSCAN_APIKEY,
-            rootEndpoint: 'https://api.etherscan.io/api',
-            cacheTime: 5000
-        }
+    etherscan: {
+        apiKey: process.env.ETHERSCAN_APIKEY,
+
+        rootEndpoint: 'https://api.etherscan.io/api',
+
+        /**
+         * Based on free api plan its
+         * 5 calls/second limit
+         * And up to 100,000 API calls per day
+         * @see https://etherscan.io/apis
+         */
+        requestRate: 200
     },
     bufferSize: 100
 };
