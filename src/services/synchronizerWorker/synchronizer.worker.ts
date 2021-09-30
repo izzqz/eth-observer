@@ -25,10 +25,9 @@ function timeout(ms) {
 
 /**
  * Wrapper around ehterScan. Returns only transactions.
- * @param number Block number
  */
-async function getTransactionsOf(number): Promise<transaction[]> {
-    return await etherScan.getBlockByNumber(number).then((d) => {
+async function getTransactionsOf(blockNumber): Promise<transaction[]> {
+    return await etherScan.getBlockByNumber(blockNumber).then((d) => {
         return d.result.transactions.map((t) => {
             return {
                 from: t.from,
@@ -85,7 +84,7 @@ async function getTransactionsOf(number): Promise<transaction[]> {
             event: 'log',
             value: `Filling the buffer ${transactionsBuffer.length}/${bufferSize} completed`
         });
-    } while (transactionsBuffer.length <= bufferSize);
+    } while (transactionsBuffer.length < bufferSize);
 
     transactionsBuffer.forEach((transactions) =>
         parentPort.postMessage({

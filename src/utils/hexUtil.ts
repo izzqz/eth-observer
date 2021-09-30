@@ -30,15 +30,15 @@ const hexUtil = {
      * Converts number to uint256 hexabecimal string
      * @returns hexabecimal string
      */
-    numberToUint256: (number: number): string => {
-        return (number * Math.pow(10, 18)).toString(16);
+    numberToUint256: (num: number): string => {
+        return (num * Math.pow(10, 18)).toString(16);
     },
 
     /**
      * Converts number to hexabecimal string
      */
-    toHex: (number: number): string => {
-        return '0x' + number.toString(16);
+    toHex: (num: number): string => {
+        return '0x' + num.toString(16);
     }
 };
 
