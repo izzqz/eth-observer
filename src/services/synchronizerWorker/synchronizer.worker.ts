@@ -1,4 +1,3 @@
-import { request } from 'http';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
 
 import { IEtherscan } from '../../interfaces/etherscan/etherscan.interface';
@@ -59,7 +58,7 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
     const transactionsBuffer: Array<transaction[]> = [];
 
     // First run
-    do {
+    while (transactionsBuffer.length < bufferSize) {
         lastblock = await etherScan.getLastBlockNumber().then((d) => d.result);
 
         if (lastblock !== bufferEndblock) {
@@ -84,7 +83,7 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
             event: 'log',
             value: `Filling the buffer ${transactionsBuffer.length}/${bufferSize} completed`
         });
-    } while (transactionsBuffer.length < bufferSize);
+    }
 
     transactionsBuffer.forEach((transactions) =>
         parentPort.postMessage({
@@ -104,7 +103,8 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
     });
 
     let fetched: string;
-
+    const lastTreeBlocks: string[] = new Array(3).fill('');
+    
     // Synchronizer loop
     while (true) {
         try {
@@ -112,8 +112,11 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
                 .getLastBlockNumber()
                 .then((d) => d.result);
 
-            if (lastblock !== fetched) {
-                lastblock = fetched;
+            if (!lastTreeBlocks.includes(fetched)) {
+                lastTreeBlocks.shift();
+                lastTreeBlocks.push(fetched);
+
+                lastblock = lastTreeBlocks[2];
 
                 blockTransactions = await getTransactionsOf(lastblock);
 
