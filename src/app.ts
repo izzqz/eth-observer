@@ -37,14 +37,14 @@ server.get('/mostValuableAddress', async () => {
     return observerService.mostValuableWallet;
 });
 
-function runServer() {
+const runServer = () => {
     server.listen(config.server.port, (err) => {
         if (err) {
             server.log.fatal(err.message);
             process.exit(1);
         }
     });
-}
+};
 
 process.on('SIGINT', () => {
     server.log.warn('SIGINT recieved, closing worker...');
@@ -52,7 +52,7 @@ process.on('SIGINT', () => {
     process.exit();
 });
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason) => {
     worker.terminate();
     server.log.fatal('UnhandledRejection:');
     server.log.fatal(reason);

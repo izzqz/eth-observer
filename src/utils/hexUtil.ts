@@ -1,6 +1,7 @@
 const hexUtil = {
     /**
      * Ingreases hex value to one
+     *
      * @param hex hexadecimal string
      * @returns hexadecimal string
      */
@@ -10,6 +11,7 @@ const hexUtil = {
 
     /**
      * Degreases hex value to one
+     *
      * @param hex hexadecimal string
      * @returns hexadecimal string
      */
@@ -19,6 +21,7 @@ const hexUtil = {
 
     /**
      * Parses uint256 hexabecimal string
+     *
      * @param hex hexadecimal string
      * @returns float number
      */
@@ -28,6 +31,7 @@ const hexUtil = {
 
     /**
      * Converts number to uint256 hexabecimal string
+     *
      * @returns hexabecimal string
      */
     numberToUint256: (num: number): string => {

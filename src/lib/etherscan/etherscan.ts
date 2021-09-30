@@ -74,6 +74,7 @@ export default class EtherscanService implements IEtherscan {
 
     /**
      * Returns the number of most recent block
+     *
      * @see https://docs.etherscan.io/api-endpoints/geth-parity-proxy#eth_blocknumber
      */
     async getLastBlockNumber(): Promise<BlockNumberDto> {
@@ -86,6 +87,7 @@ export default class EtherscanService implements IEtherscan {
 
     /**
      * Returns information about a block by block number
+     *
      * @param tag {string} Hexadecimal in string. Example: '0x10d4f'
      * @see https://docs.etherscan.io/api-endpoints/geth-parity-proxy#eth_getblockbynumber
      */

@@ -56,7 +56,7 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
 
     let blockTransactions: transaction[];
 
-    const transactionsBuffer: Array<transaction[]> = new Array();
+    const transactionsBuffer: Array<transaction[]> = [];
 
     // First run
     do {

@@ -56,6 +56,7 @@ export default class ObserverService {
 
         /**
          * Finding highest value in Map
+         *
          * @see https://stackoverflow.com/a/51690218/12889642
          */
         const [address, value] = [...wallets.entries()].reduce((a, e) => {

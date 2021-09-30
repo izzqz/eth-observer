@@ -21,6 +21,7 @@ const config = {
          * Based on free api plan its
          * 5 calls/second limit
          * And up to 100,000 API calls per day
+         *
          * @see https://etherscan.io/apis
          */
         requestRate: 200
