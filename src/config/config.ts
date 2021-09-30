@@ -24,7 +24,7 @@ const config = {
          *
          * @see https://etherscan.io/apis
          */
-        requestRate: 200
+        requestRate: 201
     },
     bufferSize: 100
 };
