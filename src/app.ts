@@ -8,7 +8,7 @@ const server = fastify(config.fastifyOptions);
 if (config.etherscan.apiKey) {
     server.log.debug(`ETHERSCAN_APIKEY=${config.etherscan.apiKey}`);
 } else {
-    server.log.error('Cannot run without Ethercan API key')
+    server.log.error('Cannot run without Ethercan API key');
     process.exit(1);
 }
 
@@ -50,6 +50,13 @@ process.on('SIGINT', () => {
     server.log.warn('SIGINT recieved, closing worker...');
     worker.terminate();
     process.exit();
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    worker.terminate();
+    server.log.fatal('UnhandledRejection:');
+    server.log.fatal(reason);
+    process.exit(1);
 });
 
 process.on('uncaughtException', (err) => {
