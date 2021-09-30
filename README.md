@@ -44,3 +44,11 @@ content-type: application/json; charset=utf-8
 }
 
 ```
+
+## Run in Docker
+
+```sh
+docker build -t eth-observer . && docker run -p 8080:8080 -it eth-observer
+```
+
+
