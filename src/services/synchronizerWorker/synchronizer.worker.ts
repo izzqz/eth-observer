@@ -61,14 +61,6 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
     while (transactionsBuffer.length < bufferSize) {
         lastblock = await etherScan.getLastBlockNumber().then((d) => d.result);
 
-        if (lastblock !== bufferEndblock) {
-            bufferEndblock = lastblock;
-
-            blockTransactions = await getTransactionsOf(bufferEndblock);
-
-            transactionsBuffer.push(blockTransactions); // Add to the end
-        }
-
         if (lastblock === bufferEndblock) {
             bufferStartblock = hexUtil.decrease(
                 bufferStartblock || bufferEndblock // if its first request, bufferStartblock is undefined
@@ -77,6 +69,14 @@ async function getTransactionsOf(blockNumber): Promise<transaction[]> {
             blockTransactions = await getTransactionsOf(bufferStartblock);
 
             transactionsBuffer.unshift(blockTransactions); // Add to the beginning of a buffer
+        }
+
+        if (lastblock !== bufferEndblock) {
+            bufferEndblock = lastblock;
+
+            blockTransactions = await getTransactionsOf(bufferEndblock);
+
+            transactionsBuffer.push(blockTransactions); // Add to the end
         }
 
         parentPort.postMessage({
