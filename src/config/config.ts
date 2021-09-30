@@ -1,6 +1,7 @@
 import { FastifyServerOptions } from 'fastify';
+import { config as applyEnvFile } from 'dotenv';
 
-require('dotenv').config();
+applyEnvFile();
 
 const config = {
     server: {
