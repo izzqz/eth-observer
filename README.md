@@ -44,7 +44,3 @@ content-type: application/json; charset=utf-8
 }
 
 ```
-
-## Extra feathures
-
-You can change buffer size in `src/config/config.ts`
