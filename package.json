@@ -1,7 +1,7 @@
 {
     "name": "eth-observer",
     "version": "1.0.0",
-    "description": "",
+    "description": "This is a service with one HTTP endpoint which returns the most valuable Ethereum address from the past 100 blocks",
     "scripts": {
         "lint": "tslint -p tsconfig.json",
         "test": "jest",
@@ -11,11 +11,14 @@
         "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/app.js\"",
         "start": "node build/app.js"
     },
+    "engines": {
+        "node": ">=14"
+    },
+    "private": true,
     "repository": {
         "type": "git",
         "url": "git+https://github.com/izzqz/eth-observer.git"
     },
-    "keywords": [],
     "author": "Vyacheslav <vyacheslav@izzqz.me>",
     "license": "MIT",
     "bugs": {
@@ -29,8 +32,8 @@
     },
     "devDependencies": {
         "@types/jest": "^27.0.2",
-        "@types/node": "^16.10.1",
-        "jest": "^27.2.2",
+        "@types/node": "^16.10.2",
+        "jest": "^27.2.4",
         "pino-pretty": "^7.0.1",
         "prettier": "^2.4.1",
         "rimraf": "^3.0.2",
