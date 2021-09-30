@@ -8,8 +8,8 @@
         "test:watch": "jest --watch",
         "build": "rimraf build && tsc -p tsconfig.json",
         "format": "prettier --write .",
-        "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/app.js\"",
-        "start": "node build/app.js"
+        "dev": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/server.js\"",
+        "start": "node build/server.js"
     },
     "engines": {
         "node": ">=14"
